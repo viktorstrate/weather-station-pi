@@ -1,5 +1,16 @@
-const Mongoclient = require('mongodb').MongoClient
-const url = "mongodb://localhost:27017"
-const client = new Mongoclient(url)
+var mysql = require('mysql');
 
-module.exports = client
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: ""
+});
+
+
+module.exports = (cb) => {
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to MYSQL Server!");
+    cb(con)
+  });
+}

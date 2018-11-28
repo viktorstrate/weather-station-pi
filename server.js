@@ -14,19 +14,14 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => console.log("user disconnected"))
 })
 
-mongo.connect((err, client) => {
-  if(err != null){
-    console.log("db connection faild:", err)
-    return
-  }
-
-  console.log("db connected")
-  const db = client.db("weather-station")
-
+require('./database')((db) => {
   http.listen(3000, () => {
     console.log('Web server started')
 
-    require('./i2c')(db)
+    if (process.env.DISABLE_I2C != 1) {
+      require('./i2c')(db)
+    } else {
+      console.log('Disabled i2c')
+    }
   })
-
 })
