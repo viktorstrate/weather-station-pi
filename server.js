@@ -25,6 +25,8 @@ mongo.connect((err, client) => {
 
   http.listen(3000, () => {
     console.log('Web server started')
+
+    require('./i2c')(db)
   })
 
 })
