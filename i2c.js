@@ -9,17 +9,15 @@ const POTENTIOMETER_SENSOR = 0x03
 
 
 
-function startMonetoring(db){
-    i2c.open(1, (conn) => {
-        if (conn == null) {
-            console.log('Did not find a i2c port')
-            return
-        }
+function startMonitoring(db){
+    const conn = i2c.open(1, (err) => {
+        if (err) throw err
+
         setInterval(() => {
             let data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
             console.log('LIGHT', data)
         }, 1000)
     })
-} 
+}
 
-module.exports = startMonetoring;
+module.exports = startMonitoring;
