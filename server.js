@@ -1,11 +1,11 @@
+const PORT = 3000
+
 const fs = require('fs')
 const express = require('express')
 const app = express()
 const http = require("http").Server(app)
 const io = require('socket.io')(http)
 const mongo = require('./database')
-
-const port = 3000
 
 app.use(express.static('client'))
 
@@ -14,14 +14,14 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => console.log("user disconnected"))
 })
 
-require('./database')((db) => {
-  http.listen(3000, () => {
-    console.log('Web server started')
+const db = require('./database')
 
-    if (process.env.DISABLE_I2C != 1) {
-      require('./i2c')(db)
-    } else {
-      console.log('Disabled i2c')
-    }
-  })
+http.listen(PORT, () => {
+  console.log('Web server started on http://localhost:' + PORT)
+
+  if (process.env.DISABLE_I2C != 1) {
+    require('./i2c')(db)
+  } else {
+    console.log('Disabled i2c')
+  }
 })

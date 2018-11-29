@@ -1,16 +1,12 @@
-var mysql = require('mysql');
+const sqlite = require('sqlite')
 
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: ""
-});
+module.exports = new Promise((resolve, reject) => {
+  const dbPromise = sqlite.open('./database.sqlite')
+
+  dbPromise.then(db => {
 
 
-module.exports = (cb) => {
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected to MYSQL Server!");
-    cb(con)
-  });
-}
+
+    resolve(db)
+  }).catch(reject)
+})
