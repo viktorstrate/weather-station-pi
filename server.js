@@ -14,14 +14,15 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => console.log("user disconnected"))
 })
 
-const db = require('./database')
+require('./database').then(db => {
+  http.listen(PORT, () => {
+    console.log('Web server started on http://localhost:' + PORT)
 
-http.listen(PORT, () => {
-  console.log('Web server started on http://localhost:' + PORT)
-
-  if (process.env.DISABLE_I2C != 1) {
-    require('./i2c')(db)
-  } else {
-    console.log('Disabled i2c')
-  }
+    if (process.env.DISABLE_I2C != 1) {
+      require('./i2c')(db)
+    } else {
+      console.log('Disabled i2c')
+    }
+  })
 })
+

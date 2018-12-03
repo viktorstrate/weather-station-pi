@@ -14,6 +14,8 @@ module.exports = new Promise((resolve, reject) => {
 
   dbPromise.then(db => {
 
+    console.log('Loaded db')
+
     if (fs.statSync(db_path).size == 0) {
       console.log('db not initialized, making tables')
       setup_db(db)
