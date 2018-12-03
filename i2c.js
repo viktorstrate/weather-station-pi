@@ -16,7 +16,10 @@ function startMonitoring(db){
         setInterval(() => {
             let data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
             console.log('LIGHT', data)
-        }, 1000)
+
+            db.run('INSERT INTO light_sensor (value) VALUES (?)', data)
+
+        }, 1000 * 60)
     })
 }
 
