@@ -39,12 +39,16 @@ function draw() {
   background(100)
 
   noFill()
-  var array = graphAjustment(lightSensorData)
-  beginShape()
-  for(var i = 0; i < array.length; i++){
-    vertex(array[i][0], array[i][1])
+  for(var graph of bars){
+    var array = graphAjustment(graph.data)
+    stroke(graph.color)
+    beginShape()
+    for(var item of array){
+      vertex(item[0], item[1])
+    }
+    endShape()
   }
-  endShape()
+  
 }
 
 
@@ -77,7 +81,7 @@ function graphAjustment(arr){
   yAjust = height / (ymax - ymin + yMargin*2)
 
   for(var item of arr){
-    returnArray.push( [((item[0] - xmin) * xAjust) * (-1) + width, ((item[1] - ymin + yMargin) * yAjust) * (-1) + height] )
+    returnArray.push( [((item[0] - xmin) * xAjust), ((item[1] - ymin + yMargin) * yAjust) * (-1) + height] )
   }
   return returnArray
 }
