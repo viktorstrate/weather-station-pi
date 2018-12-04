@@ -13,7 +13,7 @@ socket.on('light_sensor_start_values', data => {
 })
 
 socket.on('light_sensor_new_values', newData => {
-  console.log('received new data', data)
+  console.log('received new data', newData)
   dataArr.concat(newData)
 })
 
