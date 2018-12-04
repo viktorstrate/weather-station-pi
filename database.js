@@ -11,23 +11,12 @@ function setup_db(db) {
 
   console.log('loaded queries')
 
-  db.run(queryLight)
+  return db.run(queryLight)
     .then(() => db.run(queryTemp))
     .then(() => {
       console.log('Made tables')
     })
     .catch(err => console.log('Could not make tables', err))
-
-  // db.run(queryLight, err => {
-  //   if (err) throw err
-
-  //   console.log('database table light made successfully')
-
-  //   db.run(queryTemp, err => {
-  //     if (err) throw err
-  //     console.log('database tables made successfully')
-  //   })
-  // })
 }
 
 module.exports = new Promise((resolve, reject) => {
@@ -39,8 +28,11 @@ module.exports = new Promise((resolve, reject) => {
 
     if (fs.statSync(db_path).size == 0) {
       console.log('db not initialized, making tables')
+
       setup_db(db)
-      resolve(db)
+        .then(() => {
+          resolve(db)
+        })
     } else {
       resolve(db)
     }
