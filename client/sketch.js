@@ -14,7 +14,7 @@ socket.on('light_sensor_start_values', data => {
 
 socket.on('light_sensor_new_values', newData => {
   console.log('received new data', newData)
-  dataArr.concat(newData)
+  dataArr = dataArr.concat(newData)
 })
 
 var xmin, ymin
@@ -46,6 +46,20 @@ function graphAjustment(arr){
   var xmax = -1
   var xmin = Infinity
   var xAjust
+<<<<<<< HEAD
+=======
+
+  for(var i = 0; i < arr.length; i++){
+    if(arr[i][0] > xmax){
+      xmax = arr[i][0]
+    }
+    if(dataArr[i][0] < xmin){
+      xmin = arr[i][0]
+    }
+  }
+  xAjust = width / (xmax - xmin)
+
+>>>>>>> 543a520232755218e129a07359663e488d027048
   var ymax = -1
   var ymin = Infinity
   var yAjust

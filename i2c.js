@@ -13,15 +13,26 @@ function startMonitoring(db, io){
     const conn = i2c.open(1, (err) => {
         if (err) throw err
 
+        let counter = 0
+        let light_mesurements = []
+
         setInterval(() => {
             let data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
-            console.log('LIGHT', data)
+            light_mesurements.push(data)
+            counter++
 
-            db.run('INSERT INTO light_sensor (value) VALUES (?)', data)
+            if (counter > 10) {
+                let avgData = light_mesurements.reduce((prev, curr) => prev + curr, 0) / light_mesurements.length
+                light_mesurements = []
 
-            io.emit('light_sensor_new_values', [[new Date().getTime(), data]])
+                console.log('AVG LIGHT', avgData)
 
-        }, 1000 * 60)
+                db.run('INSERT INTO light_sensor (value) VALUES (?)', avgData)
+
+                io.emit('light_sensor_new_values', [[new Date().getTime(), avgData]])
+            }
+
+        }, 1000)
     })
 }
 
