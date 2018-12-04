@@ -18,6 +18,7 @@ function startMonitoring(db, io){
 
         setInterval(() => {
             let data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
+            data = 255 - data
             light_mesurements.push(data)
             counter++
 

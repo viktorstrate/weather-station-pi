@@ -5,24 +5,31 @@ var can
 
 var yMargin = 10
 
-var dataArr = []
+var lightSensorData = []
 
 socket.on('light_sensor_start_values', data => {
   console.log('data', data)
-  dataArr = data
+  lightSensorData = data
 })
 
 socket.on('light_sensor_new_values', newData => {
   console.log('received new data', newData)
-  dataArr = dataArr.concat(newData)
+  lightSensorData = lightSensorData.concat(newData)
 })
 
-var xmin, ymin
-var xAjust, yAjust
+var bars
 
 //runs once at program start
 function setup() {
   can = createCanvas(800, 400)
+
+  bars = [
+    {
+      title: 'Light sensor',
+      color: color('red'),
+      data: lightSensorData
+    }
+  ]
 
   frameRate(1)
 }
@@ -32,7 +39,7 @@ function draw() {
   background(100)
 
   noFill()
-  var array = graphAjustment(dataArr)
+  var array = graphAjustment(lightSensorData)
   beginShape()
   for(var i = 0; i < array.length; i++){
     vertex(array[i][0], array[i][1])
@@ -46,20 +53,7 @@ function graphAjustment(arr){
   var xmax = -1
   var xmin = Infinity
   var xAjust
-<<<<<<< HEAD
-=======
 
-  for(var i = 0; i < arr.length; i++){
-    if(arr[i][0] > xmax){
-      xmax = arr[i][0]
-    }
-    if(dataArr[i][0] < xmin){
-      xmin = arr[i][0]
-    }
-  }
-  xAjust = width / (xmax - xmin)
-
->>>>>>> 543a520232755218e129a07359663e488d027048
   var ymax = -1
   var ymin = Infinity
   var yAjust
@@ -71,7 +65,7 @@ function graphAjustment(arr){
     if(item[0] < xmin){
       xmin = item[0]
     }
-    
+
     if(item[1] > ymax){
       ymax = item[1]
     }
