@@ -12,6 +12,11 @@ socket.on('light_sensor_start_values', data => {
   dataArr = data
 })
 
+socket.on('light_sensor_new_values', newData => {
+  console.log('received new data', data)
+  dataArr.concat(newData)
+})
+
 var xmin, ymin
 var xAjust, yAjust
 
@@ -31,7 +36,7 @@ function draw() {
 
 
   print(dataArr)
-  graphAjustment() 
+  graphAjustment()
 
   noFill()
   beginShape()

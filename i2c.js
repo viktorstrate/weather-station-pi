@@ -9,7 +9,7 @@ const POTENTIOMETER_SENSOR = 0x03
 
 
 
-function startMonitoring(db){
+function startMonitoring(db, io){
     const conn = i2c.open(1, (err) => {
         if (err) throw err
 
@@ -18,6 +18,8 @@ function startMonitoring(db){
             console.log('LIGHT', data)
 
             db.run('INSERT INTO light_sensor (value) VALUES (?)', data)
+
+            io.broadcast('light_sensor_new_values', [[new Date().getTime(), data]])
 
         }, 1000 * 60)
     })

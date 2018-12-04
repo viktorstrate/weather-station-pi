@@ -27,7 +27,7 @@ require('./database').then(db => {
     console.log('Web server started on http://localhost:' + PORT)
 
     if (process.env.DISABLE_I2C != 1) {
-      require('./i2c')(db)
+      require('./i2c')(db, io)
     } else {
       console.log('Disabled i2c')
     }
