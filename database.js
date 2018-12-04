@@ -7,6 +7,7 @@ function setup_db(db, resolve) {
   const query = fs.readFileSync('./setup.sql', 'utf8')
   db.run(query, () => resolve(db))
   console.log('database tables made successfully')
+  resolve(db)
 }
 
 module.exports = new Promise((resolve, reject) => {
