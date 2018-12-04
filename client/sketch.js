@@ -5,27 +5,25 @@ var can
 
 var yMargin = 10
 
-var lightSensorData = []
-var tempSensorData = []
 
 socket.on('light_sensor_start_values', data => {
   console.log('data from light', data)
-  lightSensorData = data
+  bars[0].data = data
 })
 
 socket.on('light_sensor_new_values', newData => {
   console.log('received new data from light', newData)
-  lightSensorData = lightSensorData.concat(newData)
+  bars[0].data = bars[0].data.concat(newData)
 })
 
 socket.on('temp_sensor_start_values', data => {
   console.log('data from temp', data)
-  tempSensorData = data
+  bars[1].data = data
 })
 
 socket.on('temp_sensor_new_values', newData => {
   console.log('received new data from temp', newData)
-  tempSensorData = tempSensorData.concat(newData)
+  bars[1].data = bars[1].data.concat(newData)
 })
 
 var bars
@@ -38,11 +36,11 @@ function setup() {
     {
       title: 'Light sensor',
       color: color('red'),
-      data: lightSensorData
+      data: []
     },{
       title: 'Temp sensor',
       color: color('blue'),
-      data: tempSensorData
+      data: []
     }
   ]
 
