@@ -51,8 +51,9 @@ function draw() {
   background(100)
 
   noFill()
+  var maxMin = xMaxMin()
   for(var graph of bars){
-    var array = graphAjustment(graph.data)
+    var array = graphAjustment(graph.data, maxMin[0], maxMin[1])
     stroke(color(graph.color))
     beginShape()
     for(var item of array){
@@ -64,10 +65,8 @@ function draw() {
 }
 
 
-function graphAjustment(arr){
+function graphAjustment(arr, xmin, xmax){
   var returnArray = new Array()
-  var xmax = -1
-  var xmin = Infinity
   var xAjust
 
   var ymax = -1
@@ -75,13 +74,6 @@ function graphAjustment(arr){
   var yAjust
 
   for(var item of arr){
-    if(item[0] > xmax){
-      xmax = item[0]
-    }
-    if(item[0] < xmin){
-      xmin = item[0]
-    }
-
     if(item[1] > ymax){
       ymax = item[1]
     }
@@ -96,4 +88,20 @@ function graphAjustment(arr){
     returnArray.push( [((item[0] - xmin) * xAjust), ((item[1] - ymin + yMargin) * yAjust) * (-1) + height] )
   }
   return returnArray
+}
+
+function xMaxMin(){
+  var xmax = -1
+  var xmin = Infinity
+  for(var bar of bars){
+    for(var item of bar.data){
+      if(item[0] > xmax){
+        xmax = item[0]
+      }
+      if(item[0] < xmin){
+        xmin = item[0]
+      }
+    }
+  }
+  return [xmin, xmax]
 }
