@@ -5,12 +5,20 @@ var can
 
 var yMargin = 10
 
-var dataArr = [[1000, 150], [1500, 300], [2000, 350]]
+var dataArr = []
 
 socket.on('light_sensor_start_values', data => {
   console.log('data', data)
   dataArr = data
 })
+
+socket.on('light_sensor_new_values', newData => {
+  console.log('received new data', newData)
+  dataArr.concat(newData)
+})
+
+var xmin, ymin
+var xAjust, yAjust
 
 //runs once at program start
 function setup() {
