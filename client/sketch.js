@@ -72,7 +72,7 @@ function draw() {
   noFill()
 
   for(var graph of bars){
-    var array = graphAjustment(graph.data, min, max)
+    var array = graphAdjustment(graph.data, min, max)
     stroke(color(graph.color))
     beginShape()
     for(var item of array){
@@ -84,7 +84,7 @@ function draw() {
 }
 
 
-function graphAjustment(arr, xmin, xmax){
+function graphAdjustment(arr, xmin, xmax){
   var returnArray = new Array()
   var xAjust
 
