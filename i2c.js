@@ -22,6 +22,8 @@ function startMonitoring(db, io){
             counter++
 
             if (counter > 10) {
+                counter = 0
+
                 let avgData = light_mesurements.reduce((prev, curr) => prev + curr, 0) / light_mesurements.length
                 light_mesurements = []
 
