@@ -19,7 +19,7 @@ function startMonitoring(db, io){
 
             db.run('INSERT INTO light_sensor (value) VALUES (?)', data)
 
-            io.broadcast('light_sensor_new_values', [[new Date().getTime(), data]])
+            io.emit('light_sensor_new_values', [[new Date().getTime(), data]])
 
         }, 1000 * 60)
     })
