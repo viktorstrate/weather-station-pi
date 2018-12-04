@@ -17,10 +17,16 @@ function startMonitoring(db, io){
         let light_mesurements = []
 
         setInterval(() => {
-            let data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
-            data = 255 - data
-            light_mesurements.push(data)
-            counter++
+            let data
+
+            try {
+                data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
+                data = 255 - data
+                light_mesurements.push(data)
+                counter++
+            } catch (err) {
+                console.log('Could not read from light sensor', err.message)
+            }
 
             if (counter > 10) {
                 counter = 0
