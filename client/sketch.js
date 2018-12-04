@@ -5,6 +5,17 @@ var can
 
 var yMargin = 10
 
+var bars = [
+  {
+    title: 'Light sensor',
+    color: 'red',
+    data: []
+  },{
+    title: 'Temp sensor',
+    color: 'blue',
+    data: []
+  }
+]
 
 socket.on('light_sensor_start_values', data => {
   console.log('data from light', data)
@@ -26,23 +37,11 @@ socket.on('temp_sensor_new_values', newData => {
   bars[1].data = bars[1].data.concat(newData)
 })
 
-var bars
+
 
 //runs once at program start
 function setup() {
   can = createCanvas(800, 400)
-
-  bars = [
-    {
-      title: 'Light sensor',
-      color: color('red'),
-      data: []
-    },{
-      title: 'Temp sensor',
-      color: color('blue'),
-      data: []
-    }
-  ]
 
   frameRate(1)
 }
@@ -54,7 +53,7 @@ function draw() {
   noFill()
   for(var graph of bars){
     var array = graphAjustment(graph.data)
-    stroke(graph.color)
+    stroke(color(graph.color))
     beginShape()
     for(var item of array){
       vertex(item[0], item[1])
