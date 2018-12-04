@@ -20,6 +20,12 @@ require('./database').then(db => {
       socket.emit('light_sensor_start_values', data)
     })
 
+    db.all('SELECT * FROM temperature_sensor').then(rows => {
+      const data = rows.map(x => [new Date(x.timestamp).getTime(), x.value])
+
+      socket.emit('temp_sensor_start_values', data)
+    })
+
     socket.on('disconnect', () => console.log("user disconnected"))
   })
 

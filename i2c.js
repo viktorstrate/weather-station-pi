@@ -15,30 +15,46 @@ function startMonitoring(db, io){
 
         let counter = 0
         let light_mesurements = []
+        let temp_mesurements = []
 
         setInterval(() => {
-            let data
 
+            counter++
+
+            // Light sensor
             try {
-                data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
+                let data = conn.readByteSync(SENSOR_ADDR, LIGHT_SENSOR)
                 data = 255 - data
                 light_mesurements.push(data)
-                counter++
             } catch (err) {
                 console.log('Could not read from light sensor', err.message)
+            }
+
+            // Temperature sensor
+            try {
+                let data = conn.readByteSync(SENSOR_ADDR, THERMOMETER_SENSOR)
+                temp_mesurements.push(data)
+            } catch (err) {
+                console.log('Could not read from temperatur sensor', err.message)
             }
 
             if (counter > 10) {
                 counter = 0
 
-                let avgData = light_mesurements.reduce((prev, curr) => prev + curr, 0) / light_mesurements.length
+                let avgLight = light_mesurements.reduce((prev, curr) => prev + curr, 0) / light_mesurements.length
                 light_mesurements = []
 
-                console.log('AVG LIGHT', avgData)
+                let avgTemp = temp_mesurements.reduce((prev, curr) => prev + curr, 0) / temp_mesurements.length
+                temp_mesurements = []
 
-                db.run('INSERT INTO light_sensor (value) VALUES (?)', avgData)
+                console.log('AVG LIGHT', avgLight)
+                console.log('AVG TEMPERATURE', avgTemp)
 
-                io.emit('light_sensor_new_values', [[new Date().getTime(), avgData]])
+                db.run('INSERT INTO light_sensor (value) VALUES (?)', avgLight)
+                db.run('INSERT INTO temperature_sensor (value) VALUES (?)', avgTemp)
+
+                io.emit('light_sensor_new_values', [[new Date().getTime(), avgLight]])
+                io.emit('temp_sensor_new_values', [[new Date().getTime(), avgTemp]])
             }
 
         }, 1000)
