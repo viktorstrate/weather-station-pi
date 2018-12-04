@@ -9,12 +9,20 @@ const mongo = require('./database')
 
 app.use(express.static('client'))
 
-io.on('connection', (socket) => {
-  console.log("user connected")
-  socket.on('disconnect', () => console.log("user disconnected"))
-})
-
 require('./database').then(db => {
+
+  io.on('connection', (socket) => {
+    console.log("user connected")
+
+    db.all('SELECT * FROM light_sensor').then(rows => {
+      const data = rows.map(x => [new Date(x.timestamp).getTime(), x.value])
+
+      socket.emit('light_sensor_start_values', data)
+    })
+
+    socket.on('disconnect', () => console.log("user disconnected"))
+  })
+
   http.listen(PORT, () => {
     console.log('Web server started on http://localhost:' + PORT)
 
