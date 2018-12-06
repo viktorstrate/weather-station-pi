@@ -2,8 +2,9 @@ const socket = io()
 
 //canvas
 var can
-
 var yMargin = 10
+var startSlider
+var startTime = 0
 
 var bars = [
   {
@@ -55,6 +56,18 @@ function setup() {
     elm.parent(labelContainer)
   }
 
+  const settings = createElement('div')
+  settings.id('settings')
+  createSpan('Zoom:').parent(settings)
+
+  startSlider = createSlider(0, 1, 0, 0.01)
+  startSlider.parent(settings)
+  startSlider.changed(() => {
+    let data = bars[0].data
+    startTime = data[Math.floor(startSlider.value() * (data.length-2))][0]
+    draw()
+  })
+
   // frameRate(1)
   noLoop() // draw is manually called when new data should be rendered
 }
@@ -64,15 +77,15 @@ function draw() {
   background(255)
 
   var maxMin = xMaxMin()
-  var min = maxMin[0]
-  var max = maxMin[1]
+  var xmin = max(maxMin[0], startTime)
+  var xmax = maxMin[1]
 
-  drawTimestampLines(min, max)
+  drawTimestampLines(xmin, xmax)
 
   noFill()
 
   for(var graph of bars){
-    var array = graphAdjustment(graph.data, min, max)
+    var array = graphAdjustment(graph.data, xmin, xmax)
     stroke(color(graph.color))
     beginShape()
     for(var item of array){
