@@ -1,6 +1,6 @@
 const socket = io();
 
-const flipPoint = x => 255 - x[1];
+const flipPoint = x => [x[0], 255 - x[1]];
 
 //canvas
 var can;
