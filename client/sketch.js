@@ -1,6 +1,6 @@
 const socket = io();
 
-const flipPoint = x => 255 - x[0];
+const flipPoint = x => 255 - x[1];
 
 //canvas
 var can;
@@ -41,7 +41,7 @@ socket.on("temp_sensor_start_values", data => {
 });
 
 socket.on("temp_sensor_new_values", newData => {
-  data = data.map(flipPoint);
+  newData = newData.map(flipPoint);
   console.log("received new data from temp", newData);
   bars[1].data = bars[1].data.concat(newData);
   draw();
